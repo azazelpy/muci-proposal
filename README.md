@@ -1,6 +1,6 @@
 # 📋 MuCi Proposal — Winning IT Services Bid for Paraguay's National Science Museum
 
-> **Status:** ✅ AWARDED — 6-year contract (2024-2030)  
+> **Status:** ✅ **AWARDED** — 6-year contract (2024-2030)  
 > **Scope:** Full managed IT for Museo de Ciencias (MuCi) — Planetarium, exhibitions, labs, admin, 24/7 operations  
 > **Value:** ~US$2.8M over 6 years  
 > **Team:** 5 FTE (CTO, SysAdmin, DevOps, Support L1/L2, Security)
@@ -79,7 +79,7 @@ MINIX won the competitive public tender (Licitación Pública Nº 12/2023) to pr
 │              ▼             ▼             ▼                   │
 │        ┌──────────┐ ┌──────────┐ ┌──────────┐               │
 │        │ Firewall │ │  NAS/SAN │ │  Hyper-V │               │
-│        │ (OPNsense)│ │ (TrueNAS)│ │  Cluster │               │
+│        │ (OPNsense)│ │ (TrueNAS)│ │ Cluster  │               │
 │        └────┬─────┘ └────┬─────┘ └────┬─────┘               │
 │             │            │           │                      │
 │             └────────────┴───────────┘                      │
@@ -93,86 +93,92 @@ MINIX won the competitive public tender (Licitación Pública Nº 12/2023) to pr
                     ┌────────▼────────┐
                     │   MINIX HQ      │
                     │  (Asunción)     │
-                    │  NOC + OMV      │
                     └─────────────────┘
 ```
 
 ---
 
-## Key Deliverables (First 90 Days)
-
-| Week | Milestone | Acceptance Criteria |
-|------|-----------|---------------------|
-| 1-2 | **Transition** | Inventory complete, credentials in Vault, runbooks documented |
-| 3-4 | **Monitoring Live** | Prometheus + Grafana + Alertmanager → Telegram/Email |
-| 5-6 | **Backup Validated** | Veeam/rsync → OMV ZFS, test restores weekly |
-| 7-8 | **DR Drill** | Planetarium failover to cold spare < 2h (RTO met) |
-| 9-10 | **Hardening** | CIS benchmarks, vuln scan 0 critical, pen test report |
-| 11-12 | **Steady State** | All SLAs green 30 consecutive days |
-
----
-
 ## BCP/DRP Highlights
 
-| Scenario | RPO | RTO | Strategy |
-|----------|-----|-----|----------|
-| Planetarium server failure | 1h | 2h | Cold spare on-site + config in Git |
-| Storage array failure | 1h | 4h | ZFS replication to OMV (async) |
-| Site power loss | 0 | 0 | UPS (30min) → Generator (72h fuel) |
-| Ransomware | 1h | 4h | Immutable backups, air-gapped copy |
-| WAN outage | 0 | 30s | Dual ISP (Tigo + Personal) + SSTP failover |
-
----
-
-## Budget Breakdown (Annual)
-
-| Category | Year 1 | Year 2-6 | Notes |
-|----------|--------|----------|-------|
-| **Personnel (5 FTE)** | US$420,000 | US$441,000 | +5% annual adjustment |
-| **Infrastructure** | US$85,000 | US$45,000 | Y1: hardware refresh |
-| **Licenses & Cloud** | US$35,000 | US$38,000 | Veeam, Monitoring, Microsoft 365 |
-| **Security** | US$25,000 | US$28,000 | SIEM, pen test, training |
-| **Contingency (10%)** | US$56,500 | US$55,200 | |
-| **TOTAL / YEAR** | **US$621,500** | **US$607,200** | |
-| **6-YEAR TOTAL** | **~US$3.65M** | | |
-
----
-
-## Governance & Reporting
-
-| Cadence | Artifact | Audience |
-|---------|----------|----------|
-| **Daily** | NOC shift log, backup status | Internal |
-| **Weekly** | Incident trend, SLA dashboard, capacity | Service Manager |
-| **Monthly** | Executive SLA report, budget burn, risk register | MuCi Director |
-| **Quarterly** | Strategic review, roadmap, tech debt | MuCi Board + MINIX CTO |
-| **Annual** | Contract renewal prep, major upgrade plan | Procurement + Legal |
+| Metric | Target | Implementation |
+|--------|--------|----------------|
+| **RPO (Planetarium)** | 1 hour | Continuous replication to HQ |
+| **RTO (Planetarium)** | 2 hours | Cold spare + automated failover |
+| **RPO (Admin/Labs)** | 4 hours | Hourly snapshots (TrueNAS) |
+| **RTO (Admin/Labs)** | 8 hours | Restore from HQ replica |
+| **Config Backup** | Daily | GitOps (`.rsc` + `.backup` to OMV) |
+| **Failover Test** | Quarterly | Scheduled planetarium dark-day drill |
 
 ---
 
 ## Security & Compliance
 
-- **ISO 27001 aligned** (not certified — museum budget)
-- **Data sovereignty** — all data in Paraguay (OMV + cloud region SA-East-1)
-- **GDPR/Paraguay PDP** — DPIA for visitor tracking, consent management
-- **Vulnerability management** — Monthly scans, 30-day patch SLA for Critical
-- **Penetration test** — Annual (external), quarterly (internal automated)
+- **Framework:** ISO 27001 aligned (not certified — museum budget)
+- **SIEM:** Wazuh + custom parsers for MikroTik/OPNsense/Digistar
+- **Vuln Management:** Weekly OpenVAS scans, monthly pen test (internal)
+- **Access Control:** Tailscale + 2FA, just-in-time elevation
+- **Incident Response:** 4-phase runbook (Detect → Contain → Eradicate → Recover)
+- **Data Sovereignty:** All data in Paraguay (HQ + OMV), no cloud egress
 
 ---
 
-## Why MINIX Won
+## Key Deliverables (First 90 Days)
 
-1. **Proven track record** — Lacerie network (10 sites, 99.97% uptime 2023)
-2. **Planetarium experience** — Digistar integration, show control systems
-3. **Local team** — Spanish/Guaraní support, on-site in 30 min
-4. **No vendor lock-in** — All configs as code, open standards
-5. **Cost efficiency** — 23% below next bidder, superior SLA
-6. **Innovation** — OmniRoute LLM gateway for runbook automation, Karina bot for invoice processing
+| Milestone | Target | Status |
+|-----------|--------|--------|
+| Kickoff & discovery | Week 1 | ✅ |
+| Asset inventory (CMDB) | Week 2 | ✅ |
+| Baseline monitoring | Week 3 | ✅ |
+| SLA dashboard live | Week 4 | ✅ |
+| BCP/DRP documented | Week 6 | ✅ |
+| First failover test | Week 8 | ✅ |
+| ITIL service catalog | Week 10 | ✅ |
+| Security baseline | Week 12 | ✅ |
+
+---
+
+## Governance
+
+| Cadence | Meeting | Participants |
+|---------|---------|--------------|
+| Daily | Standup (15 min) | On-site team |
+| Weekly | Service review (1h) | CTO + MuCi IT Lead |
+| Monthly | SLA report + billing | CTO + MuCi Director |
+| Quarterly | Strategic review | CTO + MuCi Board |
+| Annual | Contract renewal prep | CTO + Legal + Finance |
+
+---
+
+## Technology Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Hypervisor** | Hyper-V Server 2022 (clustered) |
+| **Storage** | TrueNAS Scale (ZFS, replication) |
+| **Firewall** | OPNsense (HA pair) |
+| **Monitoring** | Prometheus + Grafana + Alertmanager |
+| **Logging** | Loki + Promtail |
+| **GitOps** | Gitea + ArgoCD (on-prem) |
+| **CI/CD** | GitHub Actions (self-hosted runners) |
+| **Config Mgmt** | Ansible (network), PowerShell DSC (Windows) |
+| **Ticketing** | Zammad (self-hosted) |
+| **Docs** | Wiki.js + MkDocs |
+| **Secrets** | HashiCorp Vault (dev) / 1Password (team) |
+
+---
+
+## Budget Breakdown (Annual)
+
+| Category | % | Notes |
+|----------|---|-------|
+| **Personnel (5 FTE)** | 62% | Salaries, benefits, training |
+| **Infrastructure** | 18% | Hardware refresh, licenses, cloud burst |
+| **Software/SaaS** | 8% | Odoo, Digistar support, monitoring |
+| **Security** | 5% | Pen tests, certs, SIEM licensing |
+| **Contingency** | 7% | Unplanned, emergency parts |
 
 ---
 
 ## License
 
-MIT — MINIX Proposal Archive 🇵🇾
-
-*This document sanitized from winning proposal v2.0 (47 KB, 16 sections + 10 anexos). Financial details and specific technical configurations redacted per confidentiality clause.*
+MIT — MINIX Managed Services 🇵🇾
